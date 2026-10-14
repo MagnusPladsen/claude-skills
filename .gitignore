@@ -1,0 +1,9 @@
+# Personal skills are tracked; everything below is installed by other tooling.
+
+# Installer-managed (TWG, Superset, claude.ai sync)
+/twg/
+/twg-*/
+/superset/
+/synced/
+
+.DS_Store
