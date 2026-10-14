@@ -63,6 +63,7 @@ Update later with `git -C ~/.claude/skills pull`. Skills load at session start.
 | `validate-architecture` | Clean architecture validation (.NET) |
 | `frontend-design` | Distinctive, production-grade frontend interfaces |
 | `dance` | ASCII dance party when something works |
+| `runapp` | Build and open the Proton-ish app from `~/git/NotProton` (`--no-build` reopens the last build) |
 
 Other skills in this directory (TWG, Superset, synced) are installed by their own tooling and
 listed in `.gitignore`.
