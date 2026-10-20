@@ -5,12 +5,9 @@ description: Use when the user wants to report, file or submit how a game ran to
 
 # highball-db-report
 
-Files a compatibility report on [highball-db](https://github.com/gauthierpiarrette/highball-db) for the user's last
-Proton-ish session of a Steam game, through the repo's `report.yml` issue form.
-
-**The `report` label only sticks through the form.** The user has no triage rights on highball-db, so GitHub silently
-drops `--label` from `gh issue create` and the API. The form's own `labels: [report]` is applied on submit. Never
-create the issue with `gh`; open the prefilled form URL and let the user press Submit.
+Creates a compatibility report issue on [highball-db](https://github.com/gauthierpiarrette/highball-db) for the user's
+last Proton-ish session of a Steam game, with `gh`, in the same shape the repo's `report.yml` form produces, labelled
+`report`. The user does nothing in the browser.
 
 ## 1. Collect the facts
 
@@ -87,29 +84,40 @@ Write `highball-report.json` in the scratchpad directory with these keys (the fo
    launched from the macOS Steam client via Proton-ish (https://github.com/MagnusPladsen/Proton-ish).`
 3. The user's performance answer: fps, resolution, what they played into, anything that mattered.
 
-## 4. Confirm, then open the form
+## 4. Confirm, then create the issue
 
 Show the user every field as a two-column table (field, value) and wait for an explicit yes; this posts publicly.
-Then, with the absolute path of the JSON file:
+Then, with absolute paths in the scratchpad directory:
 
 ```bash
-open "$(python3 -I ~/.claude/skills/highball-db-report/report_url.py /absolute/path/to/highball-report.json)"
+python3 -I ~/.claude/skills/highball-db-report/report_body.py <scratchpad>/highball-report.json > <scratchpad>/highball-report.md
+gh issue create -R gauthierpiarrette/highball-db --title "<game>" --label report --body-file <scratchpad>/highball-report.md
 ```
 
-Tell the user to check the form and press **Submit new issue**. After they say it is submitted, verify:
+`report_body.py` refuses unknown keys, a missing title, rating or renderer, and a renderer outside the form's four.
+If `gh` rejects the label itself (a permission error naming the label), rerun the same command without `--label`.
+
+## 5. Read it back
 
 ```bash
-gh issue list -R gauthierpiarrette/highball-db --author @me -L 1 --json number,title,labels,url
+gh issue view <number> -R gauthierpiarrette/highball-db --json url,labels,body
 ```
 
-Report the URL and whether `report` is on it. If it is missing, say so; the user cannot add it afterwards.
+- Every field filled in step 3 must show its value, not `_No response_`. Fix any that does with `gh issue edit
+  <number> --body-file` on a corrected copy of the body; the author may edit the body.
+- Check that `report` is among the labels. GitHub drops labels without an error for users who lack triage rights
+  on the repo. If the label is missing, tell the user in the response's heads-up block: they cannot add it, only a
+  highball-db maintainer can.
+
+Report the issue URL and the label result.
 
 ## Common mistakes
 
 | Mistake | Fix |
 |---|---|
-| `gh issue create --label report` | Label is dropped silently (#557 and #581 have no label); open the form instead |
-| Leaving out `template=report.yml` | Blank issue, no label; use `report_url.py` |
+| Opening the `report.yml` form in the browser | The user then has to finish it there; create the issue with `gh` |
+| Writing the body by hand | Headings must match the form exactly; use `report_body.py` |
+| Saying the label is on without reading it back | GitHub can drop it without an error; check `labels` in step 5 |
 | Guessing session length | Use Steam's `content_log`; ask when it has no end time (Steam may not have written it yet) |
 | Reporting the Highball app version as `version` | This is Proton-ish, not the app; use the `Not the Highball app` line |
 | Store name in another language | `game` comes from the Steam library manifest; keep it |
