@@ -1,3 +1,8 @@
+---
+name: todo
+description: "Manage shared project TODOs across the repository."
+---
+
 # /todo
 
 Manage shared project TODOs across the repository.

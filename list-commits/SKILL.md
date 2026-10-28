@@ -1,3 +1,8 @@
+---
+name: list-commits
+description: "Show commits ahead of the current branch upstream and optionally show recent history."
+---
+
 # /list-commits
 
 Show commits ahead of the current branch upstream and optionally show recent history.

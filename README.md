@@ -66,5 +66,5 @@ Update later with `git -C ~/.claude/skills pull`. Skills load at session start.
 | `runapp` | Build and open the Proton-ish app from `~/git/NotProton` (`--no-build` reopens the last build) |
 | `highball-db-report` | Report a Proton-ish game session to highball-db as a `report.yml`-shaped issue created with `gh` |
 
-Other skills in this directory (TWG, Superset, synced) are installed by their own tooling and
+Other skills in this directory (Superset, synced) are installed by their own tooling and
 listed in `.gitignore`.

@@ -1,8 +1,6 @@
 # Personal skills are tracked; everything below is installed by other tooling.
 
-# Installer-managed (TWG, Superset, claude.ai sync)
-/twg/
-/twg-*/
+# Installer-managed (Superset, claude.ai sync)
 /superset/
 /synced/
 
